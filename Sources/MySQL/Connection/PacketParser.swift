@@ -100,7 +100,7 @@ internal struct MySQLPacketParser: ByteParser {
                 let buffer = ByteBuffer(start: buffer.baseAddress!.advanced(by: offset), count: fullPacketSize)
                 
                 let packet = Packet(payload: buffer, containsPacketSize: false)
-                return Future(.completed(consuming: fullPacketSize, result: packet))
+                return Future(.completed(consuming: fullPacketSize &- header.count, result: packet))
             }
         case .body(let packet, let containing):
             let dataSize = min(packet.buffer.count &- containing, packet.buffer.count)

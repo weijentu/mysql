@@ -112,9 +112,15 @@ final class ParseResults: Task {
             // Try to parse a column
             self.columns.append(try packet.parseFieldDefinition())
         } catch {
-            // Failure might indicate no EOF is coming and a field is coming instead
-            columnsCompleted = true
-            return try parseField(from: packet)
+            if let (affectedRows, lastInsertID) = try packet.parseBinaryOK() {
+                context.affectedRows = affectedRows
+                context.lastInsertID = lastInsertID
+                return true
+            } else {
+                // Indicate no EOF is coming and a field is coming instead
+                columnsCompleted = true
+                return false
+            }
         }
         
         return false
@@ -262,13 +268,17 @@ final class PrepareQuery: Task {
             
             return false
         } else {
-            var parser = Parser(packet: packet, position: 1)
-            
-            self.id = try parser.parseUInt32()
-            self.totalColumns = try parser.parseUInt16()
-            self.totalParameters = try parser.parseUInt16()
-            
-            return false
+            if packet.payload.count == 5 {
+                return true
+            } else {
+                var parser = Parser(packet: packet, position: 1)
+                
+                self.id = try parser.parseUInt32()
+                self.totalColumns = try parser.parseUInt16()
+                self.totalParameters = try parser.parseUInt16()
+                
+                return false
+            }
         }
     }
     
@@ -382,6 +392,11 @@ struct ExecutePreparation: Task {
     var packets: [Packet] { return [packet] }
     
     func update(with packet: Packet) throws -> Bool {
-        return try parse.update(with: packet)
+        if try parse.update(with: packet) {
+            parse.stream.close()
+            return true
+        } else {
+            return false
+        }
     }
 }
