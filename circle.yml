@@ -5,7 +5,7 @@ jobs:
     macos:
       xcode: "9.0"
     steps:
-      - run: brew install vapor/tap/vapor vapor/tap/cmysql
+      - run: brew install mysql
       - run: brew services start mysql
       - checkout
       - run: swift build
@@ -14,7 +14,7 @@ jobs:
   linux:
     docker:
       - image: swift:4.0
-      - image: mysql:5.7
+      - image: mysql:8.0
         environment:
           MYSQL_ALLOW_EMPTY_PASSWORD: true
           MYSQL_DATABASE: test
@@ -30,7 +30,7 @@ jobs:
   linux-3:
     docker:
       - image: swift:3.1
-      - image: mysql:5.7
+      - image: mysql:8.0
         environment:
           MYSQL_ALLOW_EMPTY_PASSWORD: true
           MYSQL_DATABASE: test
