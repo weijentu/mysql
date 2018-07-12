@@ -28,7 +28,7 @@ extension Bind {
 
         let isNull = cBind.is_null.pointee
 
-        if isNull == 1 {
+        if isNull {
             return .null
         } else {
             #if !NOJSON
@@ -70,7 +70,7 @@ extension Bind {
                 )
                 return .string(buffer.makeString())
             case MYSQL_TYPE_LONG:
-                if cBind.is_unsigned == 1 {
+                if cBind.is_unsigned {
                     let uint = unwrap(buffer, UInt32.self)
                     return .number(.uint(UInt(uint)))
                 } else {
@@ -78,7 +78,7 @@ extension Bind {
                     return .number(.int(Int(int)))
                 }
             case MYSQL_TYPE_SHORT:
-                if cBind.is_unsigned == 1 {
+                if cBind.is_unsigned {
                     let uint = unwrap(buffer, UInt16.self)
                     return .number(.uint(UInt(uint)))
                 } else {
@@ -86,7 +86,7 @@ extension Bind {
                     return .number(.int(Int(int)))
                 }
             case MYSQL_TYPE_TINY:
-                if cBind.is_unsigned == 1 {
+                if cBind.is_unsigned {
                     let uint = unwrap(buffer, UInt8.self)
                     return .number(.uint(UInt(uint)))
                 } else {
@@ -97,7 +97,7 @@ extension Bind {
                 let bit = unwrap(buffer, Bool.self)
                 return .bool(bit)
             case MYSQL_TYPE_LONGLONG:
-                if cBind.is_unsigned == 1 {
+                if cBind.is_unsigned {
                     let uint = unwrap(buffer, UInt64.self)
                     return .number(.uint(UInt(uint)))
                 } else {

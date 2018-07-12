@@ -79,8 +79,8 @@ public final class Connection {
         
         // important! this must be set for field.max_length
         // to be properly filled
-        var truth: my_bool = 1
-        guard mysql_stmt_attr_set(statement, STMT_ATTR_UPDATE_MAX_LENGTH, &truth)  == 0 else {
+        var truth: Bool = true
+        guard !mysql_stmt_attr_set(statement, STMT_ATTR_UPDATE_MAX_LENGTH, &truth) else {
             throw lastError
         }
         
@@ -98,7 +98,7 @@ public final class Connection {
         // Transforms the `[Value]` array into bindings
         // and applies those bindings to the statement.
         let inputBinds = try Binds(values)
-        guard mysql_stmt_bind_param(statement, inputBinds.cBinds) == 0 else {
+        guard !mysql_stmt_bind_param(statement, inputBinds.cBinds) else {
             throw lastError
         }
 
@@ -140,7 +140,7 @@ public final class Connection {
         let outputBinds = Binds(fields)
 
         // Bind the output bindings to the statement.
-        guard mysql_stmt_bind_result(statement, outputBinds.cBinds) == 0 else {
+        guard !mysql_stmt_bind_result(statement, outputBinds.cBinds) else {
             throw lastError
         }
 
@@ -172,7 +172,7 @@ public final class Connection {
             // reset the bindings onto the statement to
             // signal that they may be reused as buffers
             // for the next row fetch.
-            guard mysql_stmt_bind_result(statement, outputBinds.cBinds) == 0 else {
+            guard !mysql_stmt_bind_result(statement, outputBinds.cBinds) else {
                 throw lastError
             }
         }

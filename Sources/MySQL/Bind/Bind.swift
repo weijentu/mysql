@@ -64,8 +64,8 @@ public final class Bind {
         
         
         cBind.length = UnsafeMutablePointer<UInt>.allocate(capacity: 1)
-        cBind.is_null = UnsafeMutablePointer<my_bool>.allocate(capacity: 1)
-        cBind.error = UnsafeMutablePointer<my_bool>.allocate(capacity: 1)
+        cBind.is_null = UnsafeMutablePointer<Bool>.allocate(capacity: 1)
+        cBind.error = UnsafeMutablePointer<Bool>.allocate(capacity: 1)
         
         self.cBind = cBind
     }
@@ -153,9 +153,9 @@ public final class Bind {
         cBind.buffer_type = type
         
         if unsigned {
-            cBind.is_unsigned = 1
+            cBind.is_unsigned = true
         } else {
-            cBind.is_unsigned = 0
+            cBind.is_unsigned = false
         }
         
         self.cBind = cBind
