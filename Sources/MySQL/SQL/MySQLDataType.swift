@@ -560,14 +560,14 @@ public struct MySQLDataType: SQLDataType, Equatable {
             case .some(let m): sql.append(name + "(" + m.description + ")")
             case .none: sql.append(name)
             }
-            if let charset = charset {
-                sql.append("CHARACTER SET")
-                sql.append(charset.description)
-            }
-            if let collate = collate {
-                sql.append("COLLATE")
-                sql.append(collate.description)
-            }
+            //if let charset = charset {
+            //    sql.append("CHARACTER SET")
+            //    sql.append(charset.description)
+            //}
+            //if let collate = collate {
+            //    sql.append("COLLATE")
+            //    sql.append(collate.description)
+            //}
             //if (name == "VARCHAR" &&
             //    charset == nil &&
             //    collate == nil) {
