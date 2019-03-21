@@ -568,9 +568,10 @@ public struct MySQLDataType: SQLDataType, Equatable {
                 sql.append("COLLATE")
                 sql.append(collate.description)
             }
-            if (name == "VARCHAR" &&
-                charset == nil &&
-                collate == nil) {
+            //if (name == "VARCHAR" &&
+            //    charset == nil &&
+            //    collate == nil) {
+            if (name == "VARCHAR") {
                 sql.append("CHARACTER SET")
                 sql.append("utf8mb4")
                 sql.append("COLLATE")
